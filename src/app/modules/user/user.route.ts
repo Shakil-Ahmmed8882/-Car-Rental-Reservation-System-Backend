@@ -1,15 +1,10 @@
 import { Router } from "express";
-import validateRequest from "../../middlewares/validateRequest";
-import { UserValidations } from "./user.validation";
 import { UserControllers } from "./user.controller";
 
 const router = Router()
 
-router.post('/create-admin',
-    validateRequest(UserValidations.createUserValidationSchema),        
-        UserControllers.createUser
-)
-
+ // sign up & sign in structured in auth modules
+ // here only read and update APIs
 router.get('/:id',UserControllers.getSingleUser)
 router.get('/',UserControllers.getAllUsers)
 router.patch('/:id',UserControllers.updateUser)

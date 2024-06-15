@@ -15,8 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 // application routes
-app.use('/api/v1', router);
-app.get('/', (req:Request,res:Response)=> res.send('This is test route'));
+app.use('/api', router);
 
 // Error 
 app.use(globalErrorHandler);
