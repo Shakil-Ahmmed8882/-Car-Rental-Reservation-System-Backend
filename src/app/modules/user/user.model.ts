@@ -1,12 +1,12 @@
 
 import { Schema, model } from "mongoose"
-import { TUser } from "./user.interface";
+import { TUser, TUserModel } from "./user.interface";
 import bcrypt from 'bcrypt'
 import config from "../../config";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
 
-const userSchema = new Schema<TUser>(
+const userSchema = new Schema<TUser, TUserModel>(
     {
         name:{
             type:String,
@@ -25,7 +25,8 @@ const userSchema = new Schema<TUser>(
         },
         password:{
             type:String,
-            required:true
+            required:true,
+            select:0
         },
         phone:{
             type:String,
@@ -36,6 +37,8 @@ const userSchema = new Schema<TUser>(
             required:true
         },
 
+    },{
+        timestamps:true
     }
 );
 
@@ -66,7 +69,14 @@ userSchema.post('save', async function (user,next) {
   });
 
 
-export const UserModel =  model<TUser>('User',userSchema)
+// STATIC METHODS
+userSchema.statics.isUserExist =
+ async function(email){
+    return await UserModel.findOne({email}).select('+password')
+}
+
+
+export const UserModel =  model<TUser, TUserModel>('User',userSchema)
 
 
 

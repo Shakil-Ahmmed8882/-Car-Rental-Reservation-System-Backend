@@ -14,7 +14,7 @@ router.post('/signup',
 
 router.post('/signin',
     validateRequest(UserValidations.loginValidationSchema),        
-    authContollers.createUser
+    authContollers.loginUser
 )
 
 export const authRoutes = router
