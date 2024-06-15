@@ -1,3 +1,4 @@
+import config from "../../config";
 import AppError from "../../errors/AppError";
 import { SafeTUser, TUser } from "../user/user.interface";
 import { UserModel } from "../user/user.model";
@@ -31,9 +32,9 @@ const loginUserIntoDB = async (payload: { email: string, password: string }) => 
 
   const jwtPayload = {
     email: user.email,
-    id: user._id,
+    role: user?.role
   };
-  const token = jwt.sign(jwtPayload, process.env.JWT_ACCESS_SECRET as string, { expiresIn: '10d' });
+  const token = jwt.sign(jwtPayload, config.jwt_access_secret as string, { expiresIn: '10d' });
 
   if (!token) {
     throw new AppError(500, 'Oops! Something went wrong during generating token. Try again.');
