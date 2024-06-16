@@ -8,6 +8,7 @@ import { CarControllers } from "./car.controller";
 const router = Router()
 
 router.post('/', auth(USER_ROLE.admin), validateRequest(carValidations.createCarValidationSchema),CarControllers.CreateCar)
+router.get('/', CarControllers.getAllCars)
 
 
 export const carRoutes = router

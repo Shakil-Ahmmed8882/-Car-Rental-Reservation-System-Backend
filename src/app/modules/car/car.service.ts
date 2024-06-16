@@ -5,8 +5,10 @@ const createCarIntoDB = async (payload:TCar) => {
     const result = await CarModel.create(payload)
     return result
 };
+const getAllCarsFromDB = async () => {
+  return await CarModel.find()
+};
 const getSingleCarFromDB = async () => {};
-const getAllCarsFromDB = async () => {};
 const updateCarIntoDB = async () => {};
 const deleteSingleCarFromDB = async () => {};
 
