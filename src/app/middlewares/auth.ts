@@ -9,8 +9,9 @@ import { TUerRole } from '../modules/user/user.interface';
 
 const auth = (...requiredRoles: TUerRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization;
 
+    // "Bearer token"
+    const token = req.headers.authorization?.split(" ")[1];
     // Checking is ther token provided
     if(!token){
         throw new AppError(httpStatus.UNAUTHORIZED,'Oppps! Unauthorized access!')

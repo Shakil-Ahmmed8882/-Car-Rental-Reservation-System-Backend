@@ -10,6 +10,7 @@ const router = Router()
 router.post('/', auth(USER_ROLE.admin), validateRequest(carValidations.createCarValidationSchema),CarControllers.CreateCar)
 router.get('/', CarControllers.getAllCars)
 router.get('/:id', CarControllers.getSingleCar)
+router.put('/:id',auth(USER_ROLE.admin),validateRequest(carValidations.updateValidationCarSchema), CarControllers.updateCar)
 
 
 export const carRoutes = router
