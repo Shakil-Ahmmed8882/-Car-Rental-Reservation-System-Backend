@@ -12,6 +12,14 @@ export type TCar = {
     isDeleted:boolean;
 }
 
+
+
+export type TReturnCar = {
+    bookingId: string;
+    endTime: string;
+  };
+  
+
 // extend all type from mongose Document 
 export interface TCarDocument extends TCar, Document {}
 export interface TCarModel extends Model<TCarDocument>{
@@ -21,3 +29,4 @@ export interface TCarModel extends Model<TCarDocument>{
     isCarExist(id:string):Promise<TCarDocument | null>
 
 }
+

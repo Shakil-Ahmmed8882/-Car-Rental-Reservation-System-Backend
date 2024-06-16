@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const createCarValidationSchema = z.object({
+const createCarValidationSchema = z.object({
   body:z.object({
     name: z.string().nonempty("Name is required"),
     description: z.string().nonempty("Description is required"),
@@ -13,7 +13,7 @@ export const createCarValidationSchema = z.object({
   })
 });
 
-export const updateValidationCarSchema = z.object({
+const updateValidationCarSchema = z.object({
  body:z.object({
     name: z.string().nonempty("Name is required").optional(),
     description: z.string().nonempty("Description is required").optional(),
@@ -26,7 +26,19 @@ export const updateValidationCarSchema = z.object({
  })
 });
 
+const returnCarValidationSchema = z.object({
+ body:z.object({
+  
+    bookingId:z.string(),
+    endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+      message: 'End time must be in the format HH:MM',
+    }),
+ 
+ })
+});
+
 export const carValidations = {
     createCarValidationSchema,
-    updateValidationCarSchema
+    updateValidationCarSchema,
+    returnCarValidationSchema
 }
