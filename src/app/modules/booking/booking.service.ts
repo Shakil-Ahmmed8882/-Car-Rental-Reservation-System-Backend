@@ -78,10 +78,27 @@ const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getMyBookingsFromDB = async (email: string) => {
+  // check is the user exist in database
+  const user = await UserModel.isUserExist(email);
+  if (!user) {
+    throw new AppError(404, 'Opps! User not found');
+  }
+
+  //check the user by id in bookings collection
+  const userId = user._id;
+  const myBookings = await BookingModel.find({ user: userId })
+    .populate('user')
+    .populate('car');
+
+  return myBookings;
+};
+
 const updateSingleBookingFromDB = async () => {};
 
 export const BookingServices = {
   BookCarIntoDB,
   getAllBookingsFromDB,
+  getMyBookingsFromDB,
   updateSingleBookingFromDB,
 };
