@@ -8,7 +8,7 @@ import { BookingValidations } from "./booking.validation";
 const router = Router()
 
 router.post('/', auth(USER_ROLE.user),validateRequest(BookingValidations.createBookingSchema),BookingControllers.BookCar)
-// router.get('/', CarControllers.getAllCars)
+router.get('/',auth(USER_ROLE.admin),BookingControllers.getAllBookings)
 // router.get('/:id', CarControllers.getSingleCar)
 // router.put('/:id',auth(USER_ROLE.admin),validateRequest(carValidations.updateValidationCarSchema), CarControllers.updateCar)
 // router.delete('/:id', CarControllers.deleteCar)
