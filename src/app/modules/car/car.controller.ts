@@ -53,12 +53,12 @@ const updateCar = catchAsync(async (req, res) => {
 });
 
 const deleteCar = catchAsync(async (req, res) => {
-    
-      const result = await CarServices.updateCarIntoDB()
+    const {id} = req.params
+      const result = await CarServices.deleteSingleCarFromDB(id)
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Car updated succesfully',
+      message: 'Car deleted succesfully',
       data: result,
     });
 });

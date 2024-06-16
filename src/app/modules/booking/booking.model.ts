@@ -1,51 +1,41 @@
-import { model } from "mongoose";
-import { Schema } from "mongoose";
-import { TBooking } from "./booking.interface";
-
+import { model } from 'mongoose';
+import { Schema } from 'mongoose';
+import { TBooking } from './booking.interface';
 
 
 const bookingSchema = new Schema<TBooking>({
   date: {
     type: Date,
-    required: true
+    required: true,
   },
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   car: {
     type: Schema.Types.ObjectId,
     ref: 'Car',
-    required: true
+    required: true,
   },
   startTime: {
     type: String,
     required: true,
     validate: {
-      validator: function(v) {
+      validator: function (v:string) {
         return /^([01]\d|2[0-3]):([0-5]\d)$/.test(v);
       },
-      message: props => `${props.value} is not a valid 24-hour time format!`
-    }
+      message: (props) => `${props.value} is not a valid 24-hour time format!`,
+    },
   },
   endTime: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function(v) {
-        return /^([01]\d|2[0-3]):([0-5]\d)$/.test(v);
-      },
-      message: props => `${props.value} is not a valid 24-hour time format!`
-    }
+    type: String || null,
+    default:null
   },
   totalCost: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
 
-
 export const BookingModel = model<TBooking>('Booking', bookingSchema);
-
-

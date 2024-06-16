@@ -43,7 +43,17 @@ const updateCarIntoDB = async (id:string,payload:TCar) => {
   return result
 };
 
-const deleteSingleCarFromDB = async () => {};
+const deleteSingleCarFromDB = async (id:string) => {
+
+  // check valid id
+  if(!isValidObjectId(id)){
+    throw new AppError(httpStatus.BAD_REQUEST,'Opps! Invalid id ')
+  }
+  
+  const result = await CarModel.findByIdAndUpdate(id,{isDeleted:true},{new:true,runValidators:true})
+  return result
+
+};
 
 export const CarServices = {
   createCarIntoDB,

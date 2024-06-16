@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../errors/AppError';
 import httpStatus from 'http-status';
-import jwt, { JwtPayload, decode } from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import config from '../config';
 import { TUerRole } from '../modules/user/user.interface';
 
@@ -33,7 +33,7 @@ const auth = (...requiredRoles: TUerRole[]) => {
         }
         
         // all ok -> make user available in req
-        req.user = decode as JwtPayload
+        req.user = decoded as JwtPayload
         next()
     })
 
