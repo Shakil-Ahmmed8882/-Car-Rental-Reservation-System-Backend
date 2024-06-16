@@ -1,3 +1,4 @@
+import { Document, Model } from "mongoose";
 
 
 export type TCar = {
@@ -9,4 +10,14 @@ export type TCar = {
     features:string[];
     pricePerHour:number;
     isDeleted:boolean;
+}
+
+// extend all type from mongose Document 
+export interface TCarDocument extends TCar, Document {}
+export interface TCarModel extends Model<TCarDocument>{
+
+    // is this car exist in DB 
+    // eslint-disable-next-line no-unused-vars
+    isCarExist(id:string):Promise<TCarDocument | null>
+
 }

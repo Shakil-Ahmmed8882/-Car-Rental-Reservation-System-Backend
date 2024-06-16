@@ -9,6 +9,7 @@ const router = Router()
 
 router.post('/', auth(USER_ROLE.admin), validateRequest(carValidations.createCarValidationSchema),CarControllers.CreateCar)
 router.get('/', CarControllers.getAllCars)
+router.get('/:id', CarControllers.getSingleCar)
 
 
 export const carRoutes = router

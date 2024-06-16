@@ -28,7 +28,9 @@ const getAllCars = catchAsync(async (req, res) => {
 
 const getSingleCar = catchAsync(async (req, res) => {
     
-    const result = await CarServices.getSingleCarFromDB()
+
+    const {id} = req.params
+    const result = await CarServices.getSingleCarFromDB(id)
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

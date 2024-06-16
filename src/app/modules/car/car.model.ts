@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { TCar } from './car.interface';
+import { TCar, TCarModel } from './car.interface';
 
-const carSchema = new Schema<TCar>(
+const carSchema = new Schema<TCar, TCarModel>(
   {
     name: {
       type: String,
@@ -42,4 +42,11 @@ const carSchema = new Schema<TCar>(
   },
 );
 
-export const CarModel = model<TCar>('Car', carSchema);
+
+carSchema.statics.isCarExist = async function(id){
+  return await CarModel.findById(id)
+}
+
+
+
+export const CarModel = model<TCar, TCarModel>('Car', carSchema);

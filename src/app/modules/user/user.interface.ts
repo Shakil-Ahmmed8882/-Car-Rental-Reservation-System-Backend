@@ -23,6 +23,7 @@ export interface SafeTUser extends Omit<TUser, 'password'> {
 export type TUerRole = keyof typeof USER_ROLE 
 
 
+// extend all type from mongose Document 
 export interface TUserDocument extends TUser, Document {}
 
 export interface TUserModel extends Model<TUserDocument> {
