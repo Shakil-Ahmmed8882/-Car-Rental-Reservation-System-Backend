@@ -17,16 +17,45 @@ const BookCar = catchAsync(async (req, res) => {
 
 const getAllBookings = catchAsync(async (req, res) => {
   const result = await BookingServices.getAllBookingsFromDB(req?.query);
+
+  // if no data found 
+  if(result.length <= 0){
+    sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: 'No Data Found',
+      data: result,
+    });
+
+  }
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Bookings are retrieved succesfully',
     data: result,
   });
+
 });
+
 const getMyBookings = catchAsync(async (req, res) => {
   const {email} = req.user
   const result = await BookingServices.getMyBookingsFromDB(email);
+
+
+// if no data found 
+if(result.length <= 0){
+  sendResponse(res, {
+    success: false,
+    statusCode: httpStatus.NOT_FOUND,
+    message: 'No Data Found',
+    data: result,
+  });
+
+}
+
+
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

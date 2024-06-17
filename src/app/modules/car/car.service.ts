@@ -49,7 +49,7 @@ const returnCarIntoDB = async (payload: TReturnCar) => {
 };
 
 const getAllCarsFromDB = async () => {
-  return await CarModel.find();
+  return await CarModel.find({isDeleted:false});
 };
 const getSingleCarFromDB = async (id: string) => {
   // check valid id
