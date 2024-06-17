@@ -5,6 +5,7 @@ import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import config from '../config';
 import { TUerRole } from '../modules/user/user.interface';
+import sendResponse from '../utils/sendResponse';
 
 
 const auth = (...requiredRoles: TUerRole[]) => {
@@ -22,14 +23,22 @@ const auth = (...requiredRoles: TUerRole[]) => {
         
         // if invalid throw error
         if(err){
-            throw new AppError(httpStatus.UNAUTHORIZED,'Opps! authorized access')
+         return res.status(401).send({
+          statusCode: 401,
+          success: false,
+          message: 'You have no access to this route',
+         })
         }
         // retrieve role decoding token
         const role = (decoded as JwtPayload)?.role
 
         // check retrieved role has access or not
         if(requiredRoles && !requiredRoles.includes(role)){
-            throw new AppError(httpStatus.UNAUTHORIZED,'Opps! authorized access')
+          return res.status(401).send({
+            statusCode: 401,
+            success: false,
+            message: 'You have no access to this route',
+           })  
         }
         
         // all ok -> make user available in req
