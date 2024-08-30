@@ -7,6 +7,9 @@ import { TBooking } from './booking.interface';
 import { BookingModel } from './booking.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { searchableFields } from './booking.constant';
+// ssl
+import { SSLPaymentGateway, totalSpendingQuery } from './utils';
+import { Types } from 'mongoose';
 
 const BookCarIntoDB = async (email: string, payload: TBooking) => {
   // check is the user exist in database
@@ -49,14 +52,20 @@ const BookCarIntoDB = async (email: string, payload: TBooking) => {
   }
 
   // set user & car id /
-  payload.user = user?._id;
-  payload.car = car?._id;
   delete payload.carId;
 
-  // all passed_/_/ save into DB
-  const result = await BookingModel.create(payload);
+  const pendingBooking = {
+    ...payload,
+    userEmail: email,
+    isPaid: false,
+    user: user?._id,
+    car: car?._id,
+  };
 
-  // Populate the user and car fields
+  const result = await BookingModel.create(pendingBooking);
+
+  // all passed_/_/ save into DB
+  ///Populate the user and car fields
   const populatedResult = await BookingModel.findById(result._id)
     .populate('user')
     .populate('car');
@@ -77,28 +86,107 @@ const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
   const result = await bookingQuery.modelQuery;
   return result;
 };
-
-const getMyBookingsFromDB = async (email: string) => {
-  // check is the user exist in database
+const getMyBookingsFromDB = async (
+  email: string,
+  query: Record<string, unknown>,
+) => {
+  // Check if the user exists in the database
   const user = await UserModel.isUserExist(email);
   if (!user) {
     throw new AppError(404, 'Opps! User not found');
   }
 
-  //check the user by id in bookings collection
+  // Check the user by id in bookings collection
   const userId = user._id;
-  const myBookings = await BookingModel.find({ user: userId })
+
+  const bookingQuery = new QueryBuilder(
+    BookingModel.find({ user: userId }).populate('user').populate('car'),
+    query,
+  )
+    .search(['status'])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await bookingQuery.modelQuery;
+
+  // Execute the pipeline
+  const totalSpendingPipeline = totalSpendingQuery(userId);
+  const totalSpendings = await BookingModel.aggregate(totalSpendingPipeline);
+
+  return { result, totalSpendings };
+};
+const getSingleBookingFromDB = async (id: string) => {
+  if (isValidObjectId(id)) {
+    const result = await BookingModel.findById(id).populate('user');
+    return result;
+  }
+};
+
+const updateSingleBookingFromDB = async (
+  bookingId: string,
+  payload: Partial<TBooking>,
+) => {
+  // Validate booking ID
+  if (!Types.ObjectId.isValid(bookingId)) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Invalid booking ID!');
+  }
+
+  // Find the booking by ID
+  const booking = await BookingModel.findById(bookingId);
+  if (!booking) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Booking not found!');
+  }
+
+  // Update only the fields specified in the TBooking type
+  const updatableFields: (keyof TBooking)[] = [
+    'pick-up-date',
+    'pick-up-time',
+    'drop-off-date',
+    'drop-off-time',
+    'totalCost',
+    'tranId',
+    'isPaid',
+    'status',
+    'name',
+    'phone',
+    'address',
+    'email',
+  ];
+
+  updatableFields.forEach((field) => {
+    if (payload[field] !== undefined) {
+      booking[field] = payload[field];
+    }
+  });
+
+  // Save the updated booking
+  await booking.save();
+
+  // Populate the user and car fields for returning
+  const populatedBooking = await BookingModel.findById(booking._id)
     .populate('user')
     .populate('car');
 
-  return myBookings;
+  return populatedBooking;
 };
 
-const updateSingleBookingFromDB = async () => {};
+const deleteBookingFromDB = async (bookingId: string) => {
+  // Validate booking ID
+  if (!Types.ObjectId.isValid(bookingId)) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Invalid booking ID!');
+  }
+
+  const result = await BookingModel.findByIdAndDelete(bookingId);
+  return result;
+};
 
 export const BookingServices = {
   BookCarIntoDB,
   getAllBookingsFromDB,
   getMyBookingsFromDB,
+  getSingleBookingFromDB,
   updateSingleBookingFromDB,
+  deleteBookingFromDB
 };

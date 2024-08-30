@@ -3,11 +3,13 @@ import { z } from 'zod';
 const createCarValidationSchema = z.object({
   body:z.object({
     name: z.string().nonempty("Name is required"),
+    type: z.string().nonempty("Type is required"),
     description: z.string().nonempty("Description is required"),
     color: z.string().nonempty("Color is required"),
     isElectric: z.boolean().refine(val => val !== undefined, { message: "isElectric is required" }),
     status: z.enum(['available', 'unavailable']).default('available'),
     features: z.array(z.string()).min(1, "Features are required"),
+    image: z.string().nonempty("Image is required"),
     pricePerHour: z.number().positive("Price per hour must be a positive number"),
     isDeleted: z.boolean().default(false)
   })

@@ -13,6 +13,8 @@ const auth = (...requiredRoles: TUerRole[]) => {
 
     // "Bearer token"
     const token = req.headers.authorization?.split(" ")[1];
+    
+    
     // Checking is ther token provided
     if(!token){
         throw new AppError(httpStatus.UNAUTHORIZED,'Oppps! Unauthorized access!')

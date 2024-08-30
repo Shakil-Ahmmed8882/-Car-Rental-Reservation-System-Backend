@@ -12,7 +12,7 @@ router.post('/signup',
     authContollers.createUser
 )
 
-router.post('/signin',
+router.post('/login',
     validateRequest(UserValidations.loginValidationSchema),        
     authContollers.loginUser
 )

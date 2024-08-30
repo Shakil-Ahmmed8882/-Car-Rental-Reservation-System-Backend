@@ -5,6 +5,7 @@ import { TCar, TReturnCar } from './car.interface';
 import { CarModel } from './car.model';
 import { BookingModel } from '../booking/booking.model';
 import { calculateTotalCost } from './car.utils';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 const createCarIntoDB = async (payload: TCar) => {
   const result = await CarModel.create(payload);
@@ -48,8 +49,22 @@ const returnCarIntoDB = async (payload: TReturnCar) => {
   return result;
 };
 
-const getAllCarsFromDB = async () => {
-  return await CarModel.find({isDeleted:false});
+const getAllCarsFromDB = async (query: Record<string,unknown>) => {
+  const carQuery = new QueryBuilder(
+    CarModel.find(),
+    query,
+  )
+    .search(["name", "type","features"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await carQuery.modelQuery;
+  
+  return result
+
+
 };
 const getSingleCarFromDB = async (id: string) => {
   // check valid id

@@ -7,6 +7,10 @@ const carSchema = new Schema<TCar, TCarModel>(
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
@@ -36,17 +40,18 @@ const carSchema = new Schema<TCar, TCarModel>(
       type: Boolean,
       default: false,
     },
+    image: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
   },
 );
 
-
-carSchema.statics.isCarExist = async function(id){
-  return await CarModel.findById(id)
-}
-
-
+carSchema.statics.isCarExist = async function (id) {
+  return await CarModel.findById(id);
+};
 
 export const CarModel = model<TCar, TCarModel>('Car', carSchema);

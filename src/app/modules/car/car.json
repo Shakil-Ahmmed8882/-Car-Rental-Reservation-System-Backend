@@ -1,0 +1,134 @@
+[
+  {
+    "name": "Tesla Model S",
+    "description": "Electric sedan with advanced autopilot features and long-range battery.",
+    "color": "White",
+    "isElectric": true,
+    "status": "available",
+    "features": ["Autopilot", "Wireless Charging", "Premium Audio"],
+    "pricePerHour": 50,
+    "image": "https://i.pinimg.com/236x/a1/fe/a2/a1fea23fa9c6290de8df728a642dfd2d.jpg",
+    "type": "Luxury"
+  },
+  {
+    "name": "BMW X5",
+    "description": "Luxury SUV with powerful engine and spacious interior.",
+    "color": "Black",
+    "isElectric": false,
+    "status": "available",
+    "features": ["All-Wheel Drive", "Heated Seats", "Navigation"],
+    "pricePerHour": 60,
+    "image": "https://i.pinimg.com/236x/50/3b/9b/503b9b6af0dc79244e9708f6466defbd.jpg",
+    "type": "SUV"
+  },
+  {
+    "name": "Audi A4",
+    "description": "Compact luxury sedan with modern technology and sleek design.",
+    "color": "Blue",
+    "isElectric": false,
+    "status": "available",
+    "features": ["Bluetooth", "Sunroof", "Backup Camera"],
+    "pricePerHour": 40,
+    "image": "https://i.pinimg.com/236x/1f/5a/e0/1f5ae0bbe38816370f21dfb86412d7c2.jpg",
+    "type": "Midsize"
+  },
+  {
+    "name": "Mercedes-Benz C-Class",
+    "description": "Elegant sedan with luxurious interior and powerful engine.",
+    "color": "Silver",
+    "isElectric": false,
+    "status": "available",
+    "features": ["Leather Seats", "Navigation", "Heated Seats"],
+    "pricePerHour": 55,
+    "image": "https://i.pinimg.com/236x/30/54/5c/30545c2785633b47e4614a08b38c0b50.jpg",
+    "type": "Luxury"
+  },
+  {
+    "name": "Ford Mustang",
+    "description": "Iconic sports car with high performance and stylish design.",
+    "color": "Red",
+    "isElectric": false,
+    "status": "available",
+    "features": ["Sports Mode", "Turbocharged Engine", "Premium Wheels"],
+    "pricePerHour": 45,
+    "image": "https://i.pinimg.com/236x/fc/f8/22/fcf822cdb5fbb2c0b5982b8161ffec14.jpg",
+    "type": "Luxury"
+  },
+  {
+    "name": "Nissan Leaf",
+    "description": "Affordable electric car with efficient design and zero emissions.",
+    "color": "Green",
+    "isElectric": true,
+    "status": "available",
+    "features": ["Eco Mode", "Wireless Charging", "Backup Camera"],
+    "pricePerHour": 35,
+    "image": "https://i.pinimg.com/236x/51/f6/52/51f6521c676425dc7557a0ac1d135182.jpg",
+    "type": "Compact"
+  },
+  {
+    "name": "Chevrolet Camaro",
+    "description": "High-performance muscle car with aggressive styling.",
+    "color": "Yellow",
+    "isElectric": false,
+    "status": "available",
+    "features": ["Sports Mode", "Turbocharged Engine", "Premium Sound System"],
+    "pricePerHour": 50,
+    "image": "https://i.pinimg.com/236x/b7/db/6b/b7db6bd29190a1151e94f11930ef75ad.jpg",
+    "type": "Full-size"
+  },
+  {
+    "name": "Jaguar I-PACE",
+    "description": "Luxury electric SUV with impressive range and dynamic performance.",
+    "color": "White",
+    "isElectric": true,
+    "status": "available",
+    "features": ["All-Wheel Drive", "Autopilot", "Panoramic Roof"],
+    "pricePerHour": 70,
+    "image": "https://i.pinimg.com/564x/b5/d1/1f/b5d11ffb5ea3391e55f53b7707978e0b.jpg",
+    "type": "SUV"
+  },
+  {
+    "name": "Porsche Taycan",
+    "description": "Electric sports car with cutting-edge technology and high performance.",
+    "color": "Black",
+    "isElectric": true,
+    "status": "available",
+    "features": ["Autopilot", "Sports Mode", "Premium Audio"],
+    "pricePerHour": 80,
+    "image": "https://i.pinimg.com/564x/51/f6/52/51f6521c676425dc7557a0ac1d135182.jpg",
+    "type": "Luxury"
+  },
+  {
+    "name": "Toyota Prius",
+    "description": "Hybrid car known for its fuel efficiency and eco-friendly design.",
+    "color": "Blue",
+    "isElectric": true,
+    "status": "available",
+    "features": ["Eco Mode", "Navigation", "Backup Camera"],
+    "pricePerHour": 30,
+    "image": "https://i.pinimg.com/474x/68/11/44/68114481826c5546971b5c96fe66cc8c.jpg",
+    "type": "Economy"
+  },
+  {
+    "name": "Lamborghini Huracán",
+    "description": "Exotic sports car with stunning performance and striking design.",
+    "color": "Orange",
+    "isElectric": false,
+    "status": "available",
+    "features": ["Sports Mode", "Carbon Fiber Trim", "Premium Sound System"],
+    "pricePerHour": 120,
+    "image": "https://i.pinimg.com/236x/68/11/44/68114481826c5546971b5c96fe66cc8c.jpg",
+    "type": "Luxury"
+  },
+  {
+    "name": "Ferrari 488",
+    "description": "Supercar with breathtaking speed and precision engineering.",
+    "color": "Red",
+    "isElectric": false,
+    "status": "available",
+    "features": ["Turbocharged Engine", "Sports Mode", "Premium Interior"],
+    "pricePerHour": 130,
+    "image": "https://i.pinimg.com/videos/thumbnails/originals/9c/2b/c3/9c2bc3b0065f5d0ae47adf0e9a889f62.0000000.jpg",
+    "type": "Luxury"
+  }
+]
