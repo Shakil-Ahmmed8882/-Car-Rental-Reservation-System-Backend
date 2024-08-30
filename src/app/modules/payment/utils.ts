@@ -1,10 +1,9 @@
 import { Types } from 'mongoose';
 import SSLCommerzPayment from 'sslcommerz-lts';
+import config from '../../config';
 
 export const SSLPaymentGateway = async (price: number) => {
-  const store_id = 'test66d026d8e620d';
-  const store_passwd = 'test66d026d8e620d@ssl';
-  const is_live = false;
+  
   const unique_tran_id = new Types.ObjectId().toString();
 
   const data = {
@@ -38,12 +37,20 @@ export const SSLPaymentGateway = async (price: number) => {
     ship_country: 'Bangladesh',
   };
 
-  const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+  const sslcz = new SSLCommerzPayment(
+    config.store_id,
+    config.store_passwd,
+    config.is_live === "true",
+  );
+
+
   const url = await sslcz.init(data).then((apiResponse) => {
     // Redirect the user to payment gateway
     const GatewayPageURL = apiResponse.GatewayPageURL;
     return GatewayPageURL;
   });
+
+  console.log({ url });
 
   return { url, tranId: unique_tran_id };
 };

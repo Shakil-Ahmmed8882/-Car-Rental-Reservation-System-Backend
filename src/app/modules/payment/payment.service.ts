@@ -11,7 +11,7 @@ const SSLPayment = async (payload, res: Response) => {
 
     // send this id from front end
     await BookingModel.findByIdAndUpdate(
-      '66d24724482be51bcccd66f4',
+      '66d251f01c88112e0452ed21',
       {
         tranId: urlAndTransactioId.tranId,
       },
