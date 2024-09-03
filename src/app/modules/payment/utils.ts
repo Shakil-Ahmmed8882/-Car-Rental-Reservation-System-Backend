@@ -10,8 +10,8 @@ export const SSLPaymentGateway = async (price: number) => {
     total_amount: price,
     currency: 'BDT',
     tran_id: unique_tran_id, // use unique tran_id for each api call
-    success_url: `http://localhost:5000/api/payment/success/${unique_tran_id}`,
-    fail_url: `http://localhost:5000/api/payment/fail/${unique_tran_id}`,
+    success_url: `${config.server_url}/payment/success/${unique_tran_id}`,
+    fail_url: `${config.server_url}/payment/fail/${unique_tran_id}`,
     cancel_url: 'http://localhost:3030/cancel',
     ipn_url: 'http://localhost:3030/ipn',
     shipping_method: 'Courier',
@@ -44,7 +44,7 @@ export const SSLPaymentGateway = async (price: number) => {
   );
 
 
-  const url = await sslcz.init(data).then((apiResponse) => {
+  const url = await sslcz.init(data).then((apiResponse:any) => {
     // Redirect the user to payment gateway
     const GatewayPageURL = apiResponse.GatewayPageURL;
     return GatewayPageURL;

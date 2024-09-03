@@ -2,16 +2,18 @@ import { BookingModel } from '../booking/booking.model';
 import { CarModel } from '../car/car.model';
 import { Response } from 'express';
 import { SSLPaymentGateway } from './utils';
+import config from '../../config';
 
-const SSLPayment = async (payload, res: Response) => {
+const SSLPayment = async (payload:{bookingId:string}, res: Response) => {
   try {
     // Update the document and return the updated document
 
+    console.log(payload)
     const urlAndTransactioId = await SSLPaymentGateway(1000);
 
     // send this id from front end
     await BookingModel.findByIdAndUpdate(
-      '66d251f01c88112e0452ed21',
+      payload.bookingId,
       {
         tranId: urlAndTransactioId.tranId,
       },
@@ -19,12 +21,13 @@ const SSLPayment = async (payload, res: Response) => {
     );
 
     res.send(urlAndTransactioId);
-  } catch (error) {
+  } catch (error:any) {
     // Handle errors
     console.error('Error updating booking status:', error.message);
     throw error;
   }
 };
+
 const paymentSuccess = async (tranId: string, res: Response) => {
   try {
     // Ensure tranId is provided and is in the correct format
@@ -35,7 +38,7 @@ const paymentSuccess = async (tranId: string, res: Response) => {
     // Update the document and return the updated document
     const bookedCar = await BookingModel.findOneAndUpdate(
       { tranId },
-      { isPaid: true },
+      { isPaid: true, returnedBy: 'customer'},
       { new: true, runValidators: true },
     );
 
@@ -51,11 +54,11 @@ const paymentSuccess = async (tranId: string, res: Response) => {
     );
 
     if (updatedCar !== null) {
-      res.redirect(`http://localhost:5173/payment/success/${tranId}`);
+      res.redirect(`${config.client_url}/payment/success/${tranId}`);
     }
 
     return bookedCar;
-  } catch (error) {
+  } catch (error:any) {
     // Handle errors
     console.error('Error updating booking status:', error.message);
     throw error;
@@ -65,14 +68,19 @@ const paymentSuccess = async (tranId: string, res: Response) => {
 const paymentFail = async (tranId: string, res: Response) => {
   try {
     // if payment is failed then delete the created booking
-    const bookedCar = await BookingModel.findOneAndDelete({ tranId });
+
+    const bookedCar = await BookingModel.findOneAndUpdate(
+      { tranId },
+      { isPaid: false, tranId: '', returnedBy: '' },
+      { new: true, runValidators: true },
+    );
 
     // Check if the document was found and updated
     if (!bookedCar) {
       throw new Error('Booking not found');
     }
-    res.redirect(`http://localhost:5173/payment/fail/${tranId}`);
-  } catch (error) {
+    res.redirect(`${config.client_url}/payment/fail/${tranId}`);
+  } catch (error:any) {
     // Handle errors
     console.error('Error updating booking status:', error.message);
     throw error;

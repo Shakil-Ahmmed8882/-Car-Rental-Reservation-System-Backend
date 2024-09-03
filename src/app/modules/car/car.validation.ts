@@ -8,10 +8,8 @@ const createCarValidationSchema = z.object({
     color: z.string().nonempty("Color is required"),
     isElectric: z.boolean().refine(val => val !== undefined, { message: "isElectric is required" }),
     status: z.enum(['available', 'unavailable']).default('available'),
-    features: z.array(z.string()).min(1, "Features are required"),
     image: z.string().nonempty("Image is required"),
     pricePerHour: z.number().positive("Price per hour must be a positive number"),
-    isDeleted: z.boolean().default(false)
   })
 });
 
@@ -30,12 +28,8 @@ const updateValidationCarSchema = z.object({
 
 const returnCarValidationSchema = z.object({
  body:z.object({
-  
-    bookingId:z.string(),
-    endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
-      message: 'End time must be in the format HH:MM',
-    }),
- 
+    bookingId:z.string({invalid_type_error: "Booking id is required"}),
+    duration:z.string({invalid_type_error: "Duration is required"})
  })
 });
 

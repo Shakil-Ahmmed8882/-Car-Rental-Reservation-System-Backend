@@ -3,3 +3,4 @@ dist
 .env
 bluePrint.js 
 steps.js
+.vercel

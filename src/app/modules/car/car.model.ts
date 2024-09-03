@@ -40,6 +40,10 @@ const carSchema = new Schema<TCar, TCarModel>(
       type: Boolean,
       default: false,
     },
+    isBooked: {
+      type: Boolean,
+      default: false,
+    },
     image: {
       type: String,
       required: true,

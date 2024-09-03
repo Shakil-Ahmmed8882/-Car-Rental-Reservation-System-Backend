@@ -20,10 +20,12 @@ router.get(
 );
 router.get('/:id', BookingControllers.getSingleBooking);
 
+
+
 router.put(
   '/:id',
-  auth(USER_ROLE.user),
-  validateRequest(BookingValidations.updateBookingSchema),
+  auth(USER_ROLE.user,USER_ROLE.admin),
+  // validateRequest(BookingValidations.updateBookingSchema),
   BookingControllers.updateBooking,
 );
 

@@ -5,7 +5,6 @@ import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import config from '../config';
 import { TUerRole } from '../modules/user/user.interface';
-import sendResponse from '../utils/sendResponse';
 
 
 const auth = (...requiredRoles: TUerRole[]) => {

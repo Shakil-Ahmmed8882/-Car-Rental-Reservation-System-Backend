@@ -11,7 +11,6 @@ import jwt from 'jsonwebtoken';
 const createUserIntoDB = async (payload: TUser) => {
   const result = await UserModel.create(payload);
   const resultObject:SafeTUser = result.toObject({versionKey:false})
-
   delete resultObject?.password 
   return resultObject;
 };
@@ -34,18 +33,18 @@ const loginUserIntoDB = async (payload: { email: string, password: string }) => 
     email: user.email,
     role: user?.role
   };
-  const token = jwt.sign(jwtPayload, config.jwt_access_secret as string, { expiresIn: '10d' });
+  const token = jwt.sign(jwtPayload, config.jwt_access_secret as string, { expiresIn: '365d' });
 
   if (!token) {
     throw new AppError(500, 'Oops! Something went wrong during generating token. Try again.');
   }
 
   // Convert Mongoose document to plain object
-  const userObj = user?.toObject();
+  const userObj: TUser = user?.toObject();
 
   // Destructure to remove password
   const { password,__v, ...restUserFields } = userObj;
-
+  console.log(password,__v)
 
   return { data: restUserFields, token };
 };

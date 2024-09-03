@@ -2,12 +2,12 @@ import { Document, Model } from "mongoose";
 
 
 export type TCar = {
-    _id: string;
     name:string;
     type:string;
     description:string;
     color:string;
     isElectric:boolean;
+    isBooked:boolean;
     status:'available' | 'unavailable';
     features:string[];
     pricePerHour:number;

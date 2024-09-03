@@ -6,7 +6,7 @@ import { BookingServices } from './booking.service';
 
 const BookCar = catchAsync(async (req, res) => {
   const { email } = req.user;
-  const result = await BookingServices.BookCarIntoDB(email, req.body, res);
+  const result = await BookingServices.BookCarIntoDB(email, req.body);
   res.send(result);
 });
 

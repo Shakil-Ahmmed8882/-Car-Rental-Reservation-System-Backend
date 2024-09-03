@@ -4,7 +4,6 @@ import { isValidObjectId } from '../../utils';
 import { TCar, TReturnCar } from './car.interface';
 import { CarModel } from './car.model';
 import { BookingModel } from '../booking/booking.model';
-import { calculateTotalCost } from './car.utils';
 import QueryBuilder from '../../builder/QueryBuilder';
 
 const createCarIntoDB = async (payload: TCar) => {
@@ -22,49 +21,39 @@ const returnCarIntoDB = async (payload: TReturnCar) => {
 
   // find the booked car by id & check is exist
   const bookedCar = await BookingModel.findById(id)
-    .populate('user')
-    .populate('car')
-    .lean();
 
   if (!bookedCar) {
     throw new AppError(404, 'Opps! Not found');
   }
 
   // get start , end time & price per hour
-  const startTime = bookedCar?.startTime as string;
-  const endTime = payload?.endTime;
-  const car = await CarModel.findById(bookedCar?.car);
-  const pricePerHour = car?.pricePerHour as number;
+  // const startTime = bookedCar?.startTime as string;
+  // const endTime = payload?.endTime;
+  // const car = await CarModel.findById(bookedCar?.car);
+  // const pricePerHour = car?.pricePerHour as number;
 
   // get total cost
-  const totalCost = calculateTotalCost(startTime, endTime, pricePerHour);
+  // const totalCost = calculateTotalCost(startTime, endTime, pricePerHour);
 
-  // update total cost
-  await BookingModel.findByIdAndUpdate(id, { totalCost,endTime });
-
-  const result = await BookingModel.findById(id)
-    .populate('user')
-    .populate('car');
-
+  // is returned by admin is lik verified by admin car was returned by 
+  // customer as like pending now approved "customer" to admin
+  const result = await BookingModel.findByIdAndUpdate(id, { isReturned: true, returnedBy: "admin"}, {new:true});
+  await CarModel.findByIdAndUpdate(result?.car, { status:"available"}, {new:true});
+  
   return result;
 };
 
-const getAllCarsFromDB = async (query: Record<string,unknown>) => {
-  const carQuery = new QueryBuilder(
-    CarModel.find(),
-    query,
-  )
-    .search(["name", "type","features"])
+const getAllCarsFromDB = async (query: Record<string, unknown>) => {
+  const carQuery = new QueryBuilder(CarModel.find({isDeleted:false}), query)
+    .search(['name', 'type', 'features'])
     .filter()
     .sort()
     .paginate()
     .fields();
 
   const result = await carQuery.modelQuery;
-  
-  return result
 
-
+  return result;
 };
 const getSingleCarFromDB = async (id: string) => {
   // check valid id

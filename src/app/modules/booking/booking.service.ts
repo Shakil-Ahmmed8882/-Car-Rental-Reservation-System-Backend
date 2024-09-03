@@ -8,7 +8,7 @@ import { BookingModel } from './booking.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { searchableFields } from './booking.constant';
 // ssl
-import { SSLPaymentGateway, totalSpendingQuery } from './utils';
+import { totalSpendingQuery } from './utils';
 import { Types } from 'mongoose';
 
 const BookCarIntoDB = async (email: string, payload: TBooking) => {
@@ -29,7 +29,11 @@ const BookCarIntoDB = async (email: string, payload: TBooking) => {
   }
 
   // check is the car exist in database
-  const car = await CarModel.findById(payload.carId);
+  const car = await CarModel.findByIdAndUpdate(
+    payload.carId,
+    { isBooked: true },
+    { new: true },
+  );
   if (!car) {
     throw new AppError(httpStatus.NOT_FOUND, 'Opps! Car not found!');
   }
@@ -73,19 +77,94 @@ const BookCarIntoDB = async (email: string, payload: TBooking) => {
 };
 
 const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
-  const bookingQuery = new QueryBuilder(
-    BookingModel.find().populate('user').populate('car'),
-    query,
-  )
+  const bookingQuery = new QueryBuilder(BookingModel.find(), query)
     .search(searchableFields)
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const result = await bookingQuery.modelQuery;
+    console.log(bookingQuery)
+  const aggregationPipeline = [
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user',
+      },
+    },
+    {
+      $lookup: {
+        from: 'cars',
+        localField: 'car',
+        foreignField: '_id',
+        as: 'car',
+      },
+    },
+    {
+      $unwind: '$user',
+    },
+    {
+      $unwind: '$car',
+    },
+    {
+      $addFields: {
+        duration: {
+          $let: {
+            vars: {
+              startDate: {
+                $dateFromString: {
+                  dateString: {
+                    $concat: ['$pick-up-date', 'T', '$pick-up-time'],
+                  },
+                },
+              },
+              endDate: {
+                $dateFromString: {
+                  dateString: {
+                    $concat: ['$drop-off-date', 'T', '$drop-off-time'],
+                  },
+                },
+              },
+            },
+            in: {
+              $dateDiff: {
+                startDate: '$$startDate',
+                endDate: '$$endDate',
+                unit: 'minute',
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      $addFields: {
+        duration: {
+          $concat: [
+            { $toString: { $floor: { $divide: ['$duration', 1440] } } },
+            'd ',
+            {
+              $toString: {
+                $mod: [{ $floor: { $divide: ['$duration', 60] } }, 24],
+              },
+            },
+            'h ',
+            { $toString: { $mod: ['$duration', 60] } },
+            'm',
+          ],
+        },
+      },
+    },
+  ];
+
+  // Apply the aggregation pipeline
+  const result = await BookingModel.aggregate(aggregationPipeline).exec();
+
   return result;
 };
+
 const getMyBookingsFromDB = async (
   email: string,
   query: Record<string, unknown>,
@@ -153,11 +232,14 @@ const updateSingleBookingFromDB = async (
     'phone',
     'address',
     'email',
+    'isReturned',
+    'returnedBy',
   ];
 
   updatableFields.forEach((field) => {
     if (payload[field] !== undefined) {
-      booking[field] = payload[field];
+      // Ensure TypeScript knows the type of `booking[field]`
+      (booking as any)[field] = payload[field];
     }
   });
 
@@ -178,6 +260,8 @@ const deleteBookingFromDB = async (bookingId: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, 'Invalid booking ID!');
   }
 
+  const bookingCar = await BookingModel.findById(bookingId);
+  await CarModel.findByIdAndUpdate(bookingCar?.car, { status: 'available', isBooked: false });
   const result = await BookingModel.findByIdAndDelete(bookingId);
   return result;
 };
@@ -188,5 +272,5 @@ export const BookingServices = {
   getMyBookingsFromDB,
   getSingleBookingFromDB,
   updateSingleBookingFromDB,
-  deleteBookingFromDB
+  deleteBookingFromDB,
 };
