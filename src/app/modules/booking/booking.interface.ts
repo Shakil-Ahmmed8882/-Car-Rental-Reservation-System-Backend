@@ -4,7 +4,6 @@ export type TBooking = {
   'pick-up-date': string;
   user: Types.ObjectId;
   car: Types.ObjectId;
-  carId?: string;
   status?: 'pending' | 'approved' | 'canceled';
   'pick-up-time': string;
   'drop-off-date'?: string;

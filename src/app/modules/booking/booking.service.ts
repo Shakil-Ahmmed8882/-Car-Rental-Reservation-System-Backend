@@ -8,73 +8,57 @@ import { BookingModel } from './booking.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { searchableFields } from './booking.constant';
 // ssl
-import { totalSpendingQuery } from './utils';
+import { isCarAlreadyBooked, totalSpendingQuery } from './utils';
 import { Types } from 'mongoose';
 
-const BookCarIntoDB = async (email: string, payload: TBooking) => {
-  // check is the user exist in database
+
+export const BookCarIntoDB = async (email: string, payload: TBooking) => {
+  // Check if the user exists
   const user = await UserModel.isUserExist(email);
   if (!user) {
-    throw new AppError(404, 'Opps! User not found');
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  // cheking is car id valid (1)
-  if (typeof payload?.carId !== 'string') {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Opps! Invalid Id!');
+  // Validate carId
+  if (!payload.car || !isValidObjectId(payload.car)) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Invalid Car ID');
   }
 
-  // cheking is car id valid (2)
-  if (!isValidObjectId(payload?.carId)) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Opps! Invalid Id!');
-  }
-
-  // check is the car exist in database
-  const car = await CarModel.findByIdAndUpdate(
-    payload.carId,
-    { isBooked: true },
-    { new: true },
-  );
+  // Check if car exists
+  const car = await CarModel.findById(payload.car);
   if (!car) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Opps! Car not found!');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Car not found');
   }
 
-  // check is the car available
-  if (car.status !== 'available') {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      'Opps! This Car is not available!',
-    );
+
+   // Check if the car is already booked
+   const existingBooking = await isCarAlreadyBooked(payload);
+  
+  
+  if (existingBooking) {
+    throw new AppError(httpStatus.CONFLICT, 'The car is already booked for the selected date range');
   }
+  
+  payload.user = user?._id
+  // Proceed with booking creation
+  const result = await BookingModel.create(payload);
 
-  // check is the car already booked by same user
-  const isBookedBySameUser = await BookingModel.findOne({
-    user: user._id,
-    car: car._id,
-  }).select('_id');
-  if (isBookedBySameUser) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Opps! Already booked!');
-  }
+  return result
 
-  // set user & car id /
-  delete payload.carId;
-
-  const pendingBooking = {
-    ...payload,
-    userEmail: email,
-    isPaid: false,
-    user: user?._id,
-    car: car?._id,
-  };
-
-  const result = await BookingModel.create(pendingBooking);
-
-  // all passed_/_/ save into DB
-  ///Populate the user and car fields
-  const populatedResult = await BookingModel.findById(result._id)
-    .populate('user')
-    .populate('car');
-  return populatedResult;
+  
 };
+
+
+
+
+
+
+// ----------------------------
+
+
+
+
+
 
 const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
   const bookingQuery = new QueryBuilder(BookingModel.find(), query)
@@ -84,7 +68,7 @@ const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
-    console.log(bookingQuery)
+  console.log(bookingQuery);
   const aggregationPipeline = [
     {
       $lookup: {
@@ -261,7 +245,7 @@ const deleteBookingFromDB = async (bookingId: string) => {
   }
 
   const bookingCar = await BookingModel.findById(bookingId);
-  await CarModel.findByIdAndUpdate(bookingCar?.car, { status: 'available', isBooked: false });
+  await CarModel.findByIdAndUpdate(bookingCar?.car, { status: 'available' });
   const result = await BookingModel.findByIdAndDelete(bookingId);
   return result;
 };

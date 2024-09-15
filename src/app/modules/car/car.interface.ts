@@ -7,7 +7,6 @@ export type TCar = {
     description:string;
     color:string;
     isElectric:boolean;
-    isBooked:boolean;
     status:'available' | 'unavailable';
     features:string[];
     pricePerHour:number;

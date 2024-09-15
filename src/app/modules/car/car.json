@@ -9,8 +9,7 @@
     "features": ["Autopilot", "Wireless Charging", "Premium Audio"],
     "pricePerHour": 50,
     "image": "https://i.pinimg.com/236x/a1/fe/a2/a1fea23fa9c6290de8df728a642dfd2d.jpg",
-    "type": "Luxury",
-    "isBooked": false
+    "type": "Luxury"
   },
   {
     "name": "BMW X5",
@@ -22,8 +21,7 @@
     "features": ["All-Wheel Drive", "Heated Seats", "Navigation"],
     "pricePerHour": 60,
     "image": "https://i.pinimg.com/236x/50/3b/9b/503b9b6af0dc79244e9708f6466defbd.jpg",
-    "type": "SUV",
-    "isBooked": false
+    "type": "SUV"
   },
   {
     "name": "Audi A4",
@@ -35,8 +33,7 @@
     "features": ["Bluetooth", "Sunroof", "Backup Camera"],
     "pricePerHour": 40,
     "image": "https://i.pinimg.com/236x/1f/5a/e0/1f5ae0bbe38816370f21dfb86412d7c2.jpg",
-    "type": "Midsize",
-    "isBooked": false
+    "type": "Midsize"
   },
   {
     "name": "Mercedes-Benz C-Class",
@@ -48,8 +45,7 @@
     "features": ["Leather Seats", "Navigation", "Heated Seats"],
     "pricePerHour": 55,
     "image": "https://i.pinimg.com/236x/30/54/5c/30545c2785633b47e4614a08b38c0b50.jpg",
-    "type": "Luxury",
-    "isBooked": false
+    "type": "Luxury"
   },
   {
     "name": "Ford Mustang",
@@ -61,8 +57,7 @@
     "features": ["Sports Mode", "Turbocharged Engine", "Premium Wheels"],
     "pricePerHour": 45,
     "image": "https://i.pinimg.com/236x/fc/f8/22/fcf822cdb5fbb2c0b5982b8161ffec14.jpg",
-    "type": "Luxury",
-    "isBooked": false
+    "type": "Luxury"
   },
   {
     "name": "Nissan Leaf",
@@ -74,8 +69,7 @@
     "features": ["Eco Mode", "Wireless Charging", "Backup Camera"],
     "pricePerHour": 35,
     "image": "https://i.pinimg.com/236x/51/f6/52/51f6521c676425dc7557a0ac1d135182.jpg",
-    "type": "Compact",
-    "isBooked": false
+    "type": "Compact"
   },
   {
     "name": "Chevrolet Camaro",
@@ -87,8 +81,7 @@
     "features": ["Sports Mode", "Turbocharged Engine", "Premium Sound System"],
     "pricePerHour": 50,
     "image": "https://i.pinimg.com/236x/b7/db/6b/b7db6bd29190a1151e94f11930ef75ad.jpg",
-    "type": "Full-size",
-    "isBooked": false
+    "type": "Full-size"
   },
   {
     "name": "Jaguar I-PACE",
@@ -100,8 +93,7 @@
     "features": ["All-Wheel Drive", "Autopilot", "Panoramic Roof"],
     "pricePerHour": 70,
     "image": "https://i.pinimg.com/564x/b5/d1/1f/b5d11ffb5ea3391e55f53b7707978e0b.jpg",
-    "type": "SUV",
-    "isBooked": false
+    "type": "SUV"
   },
   {
     "name": "Porsche Taycan",
@@ -113,8 +105,7 @@
     "features": ["Autopilot", "Sports Mode", "Premium Audio"],
     "pricePerHour": 80,
     "image": "https://i.pinimg.com/564x/51/f6/52/51f6521c676425dc7557a0ac1d135182.jpg",
-    "type": "Luxury",
-    "isBooked": false
+    "type": "Luxury"
   },
   {
     "name": "Toyota Prius",
@@ -126,8 +117,7 @@
     "features": ["Eco Mode", "Navigation", "Backup Camera"],
     "pricePerHour": 30,
     "image": "https://i.pinimg.com/474x/68/11/44/68114481826c5546971b5c96fe66cc8c.jpg",
-    "type": "Economy",
-    "isBooked": false
+    "type": "Economy"
   },
   {
     "name": "Lamborghini Huracán",
@@ -139,8 +129,7 @@
     "features": ["Sports Mode", "Carbon Fiber Trim", "Premium Sound System"],
     "pricePerHour": 120,
     "image": "https://i.pinimg.com/236x/68/11/44/68114481826c5546971b5c96fe66cc8c.jpg",
-    "type": "Luxury",
-    "isBooked": false
+    "type": "Luxury"
   },
   {
     "name": "Ferrari 488",
@@ -152,7 +141,6 @@
     "features": ["Turbocharged Engine", "Sports Mode", "Premium Interior"],
     "pricePerHour": 130,
     "image": "https://i.pinimg.com/videos/thumbnails/originals/9c/2b/c3/9c2bc3b0065f5d0ae47adf0e9a889f62.0000000.jpg",
-    "type": "Luxury",
-    "isBooked": false
+    "type": "Luxury"
   }
 ]

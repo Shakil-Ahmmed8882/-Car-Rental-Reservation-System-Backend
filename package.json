@@ -25,6 +25,7 @@
     "http-status": "^1.7.3",
     "jsonwebtoken": "^9.0.2",
     "lint-staged": "^15.1.0",
+    "moment": "^2.30.1",
     "mongoose": "^8.0.1",
     "sslcommerz-lts": "^1.1.0",
     "zod": "^3.22.4"
