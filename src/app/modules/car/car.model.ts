@@ -44,6 +44,7 @@ const carSchema = new Schema<TCar, TCarModel>(
       type: String,
       required: true,
     },
+    location: String,
   },
   {
     timestamps: true,

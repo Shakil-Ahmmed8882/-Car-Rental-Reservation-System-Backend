@@ -12,6 +12,7 @@ export type TCar = {
     pricePerHour:number;
     image:string;
     isDeleted:boolean;
+    location:string;
 }
 
 

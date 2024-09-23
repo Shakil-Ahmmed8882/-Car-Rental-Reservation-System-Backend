@@ -20,7 +20,7 @@ const returnCarIntoDB = async (payload: TReturnCar) => {
   }
 
   // find the booked car by id & check is exist
-  const bookedCar = await BookingModel.findById(id)
+  const bookedCar = await BookingModel.findById(id);
 
   if (!bookedCar) {
     throw new AppError(404, 'Opps! Not found');
@@ -35,25 +35,70 @@ const returnCarIntoDB = async (payload: TReturnCar) => {
   // get total cost
   // const totalCost = calculateTotalCost(startTime, endTime, pricePerHour);
 
-  // is returned by admin is lik verified by admin car was returned by 
+  // is returned by admin is lik verified by admin car was returned by
   // customer as like pending now approved "customer" to admin
-  const result = await BookingModel.findByIdAndUpdate(id, { isReturned: true, returnedBy: "admin"}, {new:true});
-  await CarModel.findByIdAndUpdate(result?.car, { status:"available"}, {new:true});
-  
+
+  const result = await BookingModel.findByIdAndUpdate(
+    id,
+    { isReturned: true, returnedBy: 'admin' },
+    { new: true },
+  );
+  await CarModel.findByIdAndUpdate(
+    result?.car,
+    { status: 'available' },
+    { new: true },
+  );
+
   return result;
 };
 
 const getAllCarsFromDB = async (query: Record<string, unknown>) => {
-  const carQuery = new QueryBuilder(CarModel.find({isDeleted:false}), query)
+  const { startDate, endDate } = query;
+
+  const carQuery = new QueryBuilder(CarModel.find({ isDeleted: false }), query)
     .search(['name', 'type', 'features'])
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const result = await carQuery.modelQuery;
+  // const result = await carQuery.modelQuery;
+  let availableCars = await carQuery.modelQuery;
 
-  return result;
+  
+
+  // If date filters are provided
+  if (startDate && endDate) {
+
+    
+    
+
+    // Find all cars that have bookings within the date range
+    const bookedCars = await BookingModel.find({
+      $and: [
+        { 'pick-up-date': { $lte: endDate } },  // pick-up before end date
+        { 'drop-off-date': { $gte: startDate } },  // drop-off after start date
+      ],
+    }).select('car');
+    
+    
+    const bookedCarIds = bookedCars.map((booking) => booking.car.toString());
+
+    
+    
+    // Now, fetch all cars that are NOT booked in the date range
+     availableCars = await CarModel.find({
+      _id: { $nin: bookedCarIds }, 
+      location: query.location,
+      type: query.type, 
+      status: 'available',         
+      isDeleted: false,            
+    });
+
+   
+  }
+
+  return availableCars;
 };
 const getSingleCarFromDB = async (id: string) => {
   // check valid id
